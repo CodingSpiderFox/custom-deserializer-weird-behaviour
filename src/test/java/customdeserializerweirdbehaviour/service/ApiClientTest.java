@@ -20,49 +20,49 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class ApiClientTest {
 
   public static final String JSON =
-      "{\n"
-          + "    \"data\": [\n"
-          + "        [\n"
-          + "            {\n"
-          + "                \"string1\": \"Time\",\n"
-          + "                \"string2\": \"DateTimeFormat\"\n"
-          + "            },\n"
-          + "            {\n"
-          + "                \"string1\": \"value1\",\n"
-          + "                \"string2\": \"value2\",\n"
-          + "                \"string3\": \"value3\",\n"
-          + "                \"string4\": \"value4\",\n"
-          + "                \"string5\": \"value5\"\n"
-          + "            },\n"
-          + "            {\n"
-          + "                \"string1\": \"value1_2\",\n"
-          + "                \"string2\": \"value2_2\",\n"
-          + "                \"string3\": \"value3_2\",\n"
-          + "                \"string4\": \"value4_2\",\n"
-          + "                \"string5\": \"value5_2\"\n"
-          + "            },"
-          + "            {\n"
-          + "                \"string1\": \"value1_3\",\n"
-          + "                \"string2\": \"value2_3\",\n"
-          + "                \"string3\": \"value3_3\",\n"
-          + "                \"string4\": \"value4_3\",\n"
-          + "                \"string5\": \"value5_3\"\n"
-          + "            }\n"
-          + "        ],\n"
-          + "        [\n"
-          + "            \"DateTimeString1\",\n"
-          + "            12,\n"
-          + "            0,\n"
-          + "            32.12,\n"
-          + "        ],\n"
-          + "        [\n"
-          + "            \"DateTimeString2\",\n"
-          + "            14,\n"
-          + "            5,\n"
-          + "            333.12,\n"
-          + "        ]\n"
-          + "    ]\n"
-          + "}";
+      "    {\n" +
+              "    \"data\":[\n" +
+              "            [\n" +
+              "            {\n" +
+              "                \"string1\": \"Time\",\n" +
+              "                \"string2\": \"DateTimeFormat\"\n" +
+              "            },\n" +
+              "            {\n" +
+              "                \"string1\": \"value1\",\n" +
+              "                \"string2\": \"value2\",\n" +
+              "                \"string3\": \"value3\",\n" +
+              "                \"string4\": \"value4\",\n" +
+              "                \"string5\": \"value5\"\n" +
+              "            },\n" +
+              "            {\n" +
+              "                \"string1\": \"value1_2\",\n" +
+              "                \"string2\": \"value2_2\",\n" +
+              "                \"string3\": \"value3_2\",\n" +
+              "                \"string4\": \"value4_2\",\n" +
+              "                \"string5\": \"value5_2\"\n" +
+              "            },\n" +
+              "            {\n" +
+              "                \"string1\": \"value1_3\",\n" +
+              "                \"string2\": \"value2_3\",\n" +
+              "                \"string3\": \"value3_3\",\n" +
+              "                \"string4\": \"value4_3\",\n" +
+              "                \"string5\": \"value5_3\"\n" +
+              "            }\n" +
+              "        ],\n" +
+              "        [\n" +
+              "            \"DateTimeString1\",\n" +
+              "            12,\n" +
+              "            0,\n" +
+              "            32.12\n" +
+              "        ],\n" +
+              "        [\n" +
+              "            \"DateTimeString2\",\n" +
+              "            14,\n" +
+              "            5,\n" +
+              "            333.12\n" +
+              "        ]\n" +
+              "    ]\n" +
+              "}";
 
   @Autowired private ApiClient client;
   @Autowired private MockRestServiceServer server;
