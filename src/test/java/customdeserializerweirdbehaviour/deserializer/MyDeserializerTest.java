@@ -14,9 +14,9 @@ public class MyDeserializerTest {
   public void deserializesCorrectly() {
 
     MyCustomDto dto = MyDeserializer.deserialize(ApiClientTest.JSON);
-    assertThat(dto, instanceOf(MyDeserializer.class));
-    assertThat(dto.getElement1().getString1(), is(equalTo("value1")));
-    assertThat(dto.getElement1().getString2(), is(equalTo("value2")));
+    //assertThat(dto, instanceOf(MyDeserializer.class));
+    assertThat(dto.getElement1().getString1(), is(equalTo("Time")));
+    assertThat(dto.getElement1().getString2(), is(equalTo("DateTimeFormat")));
 
     assertThat(dto.getElement2List(), hasSize(3));
 
