@@ -10,9 +10,11 @@ import lombok.SneakyThrows;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MyDeserializer extends JsonDeserializer<MyCustomDto> {
 
@@ -29,14 +31,15 @@ public class MyDeserializer extends JsonDeserializer<MyCustomDto> {
 
     jsonParser.nextToken();
     jsonParser.nextToken();
-    jsonParser.nextToken();
-    JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+    JsonNode outerArrayRootNode = jsonParser.getCodec().readTree(jsonParser);
 
-    Iterator<JsonNode> iterator = node.iterator();
+    //parse the datetime format header element
+    Iterator<JsonNode> iterator = outerArrayRootNode.path(0).iterator();
     JsonNode element1Node = iterator.next();
     ObjectMapper objectMapper = new ObjectMapper();
     result.setElement1(objectMapper.readValue(element1Node.toString(), Element1.class));
 
+    //parse the parameter definition elements
     List<Element2> element2List = new ArrayList<>();
     while (iterator.hasNext()) {
       JsonNode singleElement2Node = iterator.next();
@@ -49,19 +52,35 @@ public class MyDeserializer extends JsonDeserializer<MyCustomDto> {
 
     result.setElement2List(element2List);
 
-//    Map<String, List<BigDecimal>> tuples = new HashMap<>();
-//    List<BigDecimal> currentValueList = new ArrayList<>();
-//
-//    for (int i = 1; i < node.size(); i++) {
-//      JsonNode tupleNode = node.path(i);
-//      currentValueList.add(new BigDecimal(tupleNode.path(1).asText()));
-//
-//      //if()
-//      //tuples.put(tupleNode.path(0).asText(), );
-//    }
-//
-//    result.setValusOfTrailingArrays(tuples);
+    Map<String, List<BigDecimal>> tuples = new HashMap<>();
+
+    //the amount on elements in the first inner array determines the amount of values in each of the subsequent arrays.
+    //the first element in those subsequent arrays is always the DateTime string, then following the values measured at
+    //that point in time
+
+    int amountOfValuesForTimeStamp = getValueArrayCount(outerArrayRootNode);
+
+    for (int i = 1; i <= amountOfValuesForTimeStamp; i++) {
+      List<String> currentValueList = new ArrayList<>();
+      JsonNode tupleNode = outerArrayRootNode.path(i);
+
+      iterator = tupleNode.elements();
+      while(iterator.hasNext()) {
+        currentValueList.add(iterator.next().asText());
+      }
+
+      //the first element should always be timestamp. Use as key and the rest as numbers
+      String dateTime = currentValueList.remove(0);
+      tuples.put(dateTime, currentValueList.stream().map(s -> new BigDecimal(s)).collect(Collectors.toList()));
+    }
+
+    result.setValusOfTrailingArrays(tuples);
 
     return result;
+  }
+
+  private int getValueArrayCount(JsonNode outerArrayRootNode) {
+    // The first array is always the parameter definitions
+    return outerArrayRootNode.size() - 1;
   }
 }

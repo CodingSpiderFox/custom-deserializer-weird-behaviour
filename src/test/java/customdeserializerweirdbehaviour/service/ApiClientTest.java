@@ -1,7 +1,9 @@
 package customdeserializerweirdbehaviour.service;
 
 import customdeserializerweirdbehaviour.CustomdeserializerWeirdBehaviourApplication;
+import customdeserializerweirdbehaviour.dto.Element2;
 import customdeserializerweirdbehaviour.dto.MyCustomDto;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 
-import static org.hamcrest.Matchers.hasSize;
+import java.math.BigDecimal;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -75,8 +80,43 @@ public class ApiClientTest {
         .andRespond(withSuccess(JSON, MediaType.APPLICATION_JSON));
 
     MyCustomDto dto = client.queryApi();
+    assertThat(dto, instanceOf(MyCustomDto.class));
+    assertThat(dto.getElement1().getString1(), is(Matchers.equalTo("Time")));
+    assertThat(dto.getElement1().getString2(), is(Matchers.equalTo("DateTimeFormat")));
+
     assertThat(dto.getElement2List(), hasSize(3));
 
-    // assertThat(dto.getValusOfTrailingArrays().size(), is(equalTo(2)));
+    Element2 element2 = dto.getElement2List().get(0);
+    assertThat(element2.getString1(), is(Matchers.equalTo("value1")));
+    assertThat(element2.getString2(), is(Matchers.equalTo("value2")));
+    assertThat(element2.getString3(), is(Matchers.equalTo("value3")));
+    assertThat(element2.getString4(), is(Matchers.equalTo("value4")));
+    assertThat(element2.getString5(), is(Matchers.equalTo("value5")));
+
+
+    Element2 element2_2 = dto.getElement2List().get(1);
+    assertThat(element2_2.getString1(), is(Matchers.equalTo("value1_2")));
+    assertThat(element2_2.getString2(), is(Matchers.equalTo("value2_2")));
+    assertThat(element2_2.getString3(), is(Matchers.equalTo("value3_2")));
+    assertThat(element2_2.getString4(), is(Matchers.equalTo("value4_2")));
+    assertThat(element2_2.getString5(), is(Matchers.equalTo("value5_2")));
+
+
+    Element2 element2_3 = dto.getElement2List().get(2);
+    assertThat(element2_3.getString1(), is(Matchers.equalTo("value1_3")));
+    assertThat(element2_3.getString2(), is(Matchers.equalTo("value2_3")));
+    assertThat(element2_3.getString3(), is(Matchers.equalTo("value3_3")));
+    assertThat(element2_3.getString4(), is(Matchers.equalTo("value4_3")));
+    assertThat(element2_3.getString5(), is(Matchers.equalTo("value5_3")));
+
+    assertThat(dto.getValusOfTrailingArrays().size(), is(Matchers.equalTo(2)));
+
+    assertThat(dto.getValusOfTrailingArrays().get("DateTimeString1").get(0), is(Matchers.equalTo(new BigDecimal("12"))));
+    assertThat(dto.getValusOfTrailingArrays().get("DateTimeString1").get(1), is(Matchers.equalTo(new BigDecimal("0"))));
+    assertThat(dto.getValusOfTrailingArrays().get("DateTimeString1").get(2), is(Matchers.equalTo(new BigDecimal("32.12"))));
+
+    assertThat(dto.getValusOfTrailingArrays().get("DateTimeString2").get(0), is(Matchers.equalTo(new BigDecimal("14"))));
+    assertThat(dto.getValusOfTrailingArrays().get("DateTimeString2").get(1), is(Matchers.equalTo(new BigDecimal("5"))));
+    assertThat(dto.getValusOfTrailingArrays().get("DateTimeString2").get(2), is(Matchers.equalTo(new BigDecimal("333.12"))));
   }
 }
